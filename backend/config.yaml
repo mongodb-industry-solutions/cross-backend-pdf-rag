@@ -1,0 +1,103 @@
+# This is for internal use only. Do not change the values in this file.
+# To configure the application, please use the .env file in the root directory.
+
+example:
+  example:
+    mdb_url_secret: 
+    mdb_database: 
+    aws_access_key_id: 
+    aws_secret_access_key: 
+    aws_region: 
+    aws_s3_enabled: 
+    aws_s3_bucket: 
+    aws_s3_pdf_folder: 
+    pdf_folder: 
+    pdfs: 
+    artifacts_store: 
+    embedding_model: 
+    chat_completion_model: 
+
+example_project:
+  example_demo:
+    mdb_url_secret: 
+    mdb_database: 
+    aws_access_key_id: 
+    aws_secret_access_key: 
+    aws_region: 
+    aws_s3_enabled: 
+    aws_s3_bucket: 
+    aws_s3_pdf_folder: 
+    pdf_folder: 
+    pdfs: 
+    artifacts_store: 
+    embedding_model: 
+    chat_completion_model: 
+
+your_project:
+  your_demo:
+    mdb_url_secret: 
+    mdb_database: 
+    aws_access_key_id: 
+    aws_secret_access_key: 
+    aws_region: 
+    aws_s3_enabled: 
+    aws_s3_bucket: 
+    aws_s3_pdf_folder: 
+    pdf_folder: 
+    pdfs: 
+    artifacts_store: 
+    embedding_model: 
+    chat_completion_model: 
+
+my_industry:
+  my_demo:
+    mdb_url_secret: 
+    mdb_database: 
+    aws_access_key_id: 
+    aws_secret_access_key: 
+    aws_region: 
+    aws_s3_enabled: 
+    aws_s3_bucket: 
+    aws_s3_pdf_folder: 
+    pdf_folder: 
+    pdfs: 
+    artifacts_store: 
+    embedding_model: 
+    chat_completion_model: 
+
+fsi:
+  leafy_bank_assistant:
+    mdb_url_secret: 
+    mdb_database: 
+    aws_access_key_id: 
+    aws_secret_access_key: 
+    aws_region: 
+    aws_s3_enabled: 
+    aws_s3_bucket: 
+    aws_s3_pdf_folder: 
+    pdf_folder: 
+    pdfs: 
+    artifacts_store: 
+    embedding_model: 
+    chat_completion_model: 
+
+insurance:
+  pdf_search:
+    mdb_url_secret: 
+    mdb_database: 
+    aws_access_key_id: 
+    aws_secret_access_key: 
+    aws_region: 
+    aws_s3_enabled: 
+    aws_s3_bucket: 
+    aws_s3_pdf_folder: 
+    pdf_folder: 
+    pdfs: 
+    artifacts_store: 
+    embedding_model: 
+    chat_completion_model: 
+
+hosting:
+  origins:
+    local: 
+    prod: 
