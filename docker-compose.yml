@@ -1,11 +1,11 @@
 services:
-  demoname-backend:
+  cross-pdf-rag-backend:
     build:
       context: .
       no_cache: true
       dockerfile: Dockerfile.backend
-    image: imagename-backend:latest
+    image: cross-pdf-rag-backend-image:latest
     ports:
       - "8000:8000"
     restart: always
-    container_name: demoname-backend
+    container_name: cross-pdf-rag-backend-container

@@ -1,60 +1,69 @@
-# Demo Template: Python Backend with Next.js Frontend
+# Backend RAG with AWS Bedrock, LangChain, and MongoDB Atlas Vector Search
 
-This repository provides a template for creating a web application with a Python backend and a Next.js frontend. The backend is managed using Poetry for dependency management, while the frontend is built with Next.js, offering a modern React-based user interface.
+Backend service for retrieval-augmented generation (RAG) using AWS Bedrock, Superduper, and MongoDB Atlas Vector Search, implemented in Python.
 
-## Table of Contents
+## Where MongoDB Shines?
 
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [Create a New Repository](#create-a-new-repository)
-  - [GitHub Desktop Setup](#github-desktop-setup)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
+This project leverages [MongoDB Atlas Vector Search](https://www.mongodb.com/products/platform/atlas-vector-search) to efficiently index and search unstructured data, providing fast and relevant retrieval of information. MongoDB Atlas offers robust and scalable database solutions, making it ideal for handling large volumes of data and complex queries.
 
-## Features
+## High Level Architecture
 
-- Python backend with a RESTful API powered by [FastAPI](https://fastapi.tiangolo.com/)
-- Next.js frontend for a responsive user interface
-- Dependency management with Poetry ([More info](https://python-poetry.org/docs/basic-usage/))
-- Easy setup and configuration
+![High Level Architecture](backend/img/high-level-architecture.png)
+
+## Tech Stack
+
+- Python `>=3.10,<3.11` for the Backend implementation.
+- [MongoDB Atlas Vector Search](https://www.mongodb.com/products/platform/atlas-vector-search) for efficient data indexing and retrieval.
+- AWS [Bedrock](https://aws.amazon.com/bedrock/) models for embeddings and querying.
+- [Cohere English V3](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-embed.html) `cohere.embed-english-v3`  model for embeddings.
+- [Anthropic Claude 3 Haiku](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-runtime_example_bedrock-runtime_InvokeModel_AnthropicClaude_section.html) `anthropic.claude-3-haiku-20240307-v1:0`  model for chat completions.
+- Using [Superduper](https://superduper.io/) for simplifying the integration of AI with MongoDB databases.
 
 ## Prerequisites
-
 Before you begin, ensure you have met the following requirements:
+- MongoDB Atlas account, you can create one [here](https://account.mongodb.com/account/register). Free tier is sufficient for this project.
+- Python 3.10 or higher `>=3.10,<3.11` (but less than 3.11).
+- AWS Account with access to mentioned Bedrock models.
+- Poetry (install via [Poetry's official documentation](https://python-poetry.org/docs/#installation)).
 
-- Python 3.10 or higher (but less than 3.11)
-- Node.js 14 or higher
-- Poetry (install via [Poetry's official documentation](https://python-poetry.org/docs/#installation))
+## Setup Instructions
 
-## Getting Started
+### Step 0: Set Up MongoDB Database and Collection
 
-Follow these steps to set up the project locally.
+1. Log in to [MongoDB Atlas](https://account.mongodb.com/account/login) and create a new database named `your_database_pdf_rag`. You can use another name if you prefer, but make sure to update the environment variables accordingly. You can use the free tier for this project.
+2. Inside this database, create a collection called `default`.
 
-### Create a New Repository
+### Step 1: Configure the Environment Variables for the backend
 
-1. Navigate to the repository template on GitHub and click on **Use this template**.
-2. Create a new repository.
-3. **Do not** check the "Include all branches" option.
-4. Define a repository name following the naming convention: `<industry>-<project_name>-<highlighted_feature>`. For example, `fsi-leafybank-ai-personal-assistant` (use hyphens to separate words).
-   - The **industry** and **project name** are required; you can be creative with the highlighted feature.
-5. Provide a clear description for the repository, such as: "A repository template to easily create new demos by following the same structure."
-6. Set the visibility to **Internal**.
-7. Click **Create repository**.
+### Add environment variables
 
-### GitHub Desktop Setup
+> **_Note:_** Create a .env file within the backend directory.
 
-1. Install GitHub Desktop if you haven't already. You can download it from [GitHub Desktop's official website](https://desktop.github.com/).
-2. Open GitHub Desktop and sign in to your GitHub account.
-3. Clone the newly created repository:
-   - Click on **File** > **Clone Repository**.
-   - Select your repository from the list and click **Clone**.
-4. Create your first branch:
-   - In the GitHub Desktop interface, click on the **Current Branch** dropdown.
-   - Select **New Branch** and name it `feature/branch01`.
-   - Click **Create Branch**.
+```bash
+MONGODB_URI = "mongodb+srv://<REPLACE_USERNAME>:<REPLACE_PASSWORD>@<REPLACE_CLUSTER_NAME>.mongodb.net/<REPLACE_DATABASE_NAME>"
+ARTIFACT_STORE = "data/your_project/your_demo/artifacts"
+AWS_REGION = "<REPLACE_AWS_REGION>"
+AWS_ACCESS_KEY_ID = "<REPLACE_AWS_ACCESS_KEY>"
+AWS_SECRET_ACCESS_KEY = "<REPLACE_AWS_SECRET_ACCESS_KEY>"
+AWS_S3_ENABLED = False
+AWS_S3_BUCKET = 
+AWS_S3_PDF_FOLDER = 
+PDF_FOLDER = "data/your_project/your_demo/pdfs"
+PDFS = ["my_pdf_to_index1.pdf", "my_pdf_to_index2.pdf"] # Add the PDFs you want to index, make sure they are in the PDF_FOLDER
+EMBEDDING_MODEL = "cohere.embed-english-v3"
+CHAT_COMPLETION_MODEL = "anthropic.claude-3-haiku-20240307-v1:0"
+ORIGINS_LOCAL=http://localhost:3000
+```
 
-### Backend Setup
+### Step 2: Configure AWS Account
+
+1. Create an AWS account if you don't have one.
+2. Add the AWS Access Key ID and Secret Access Key to the environment variables in the `.env` file.
+3. Grant the necessary permissions to the AWS account: `AmazonBedrockFullAccess`, but in case you enable S3, you will need to add `AmazonS3FullAccess` and `SecretsManagerReadWrite` permissions. There are some varibles in the `.env` file that you can use to enable or disable the S3 integration.
+
+## Run it Locally
+
+### Backend
 
 1. (Optional) Set your project description and author information in the `pyproject.toml` file:
    ```toml
@@ -74,19 +83,46 @@ Follow these steps to set up the project locally.
     ````
 6. Verify that the `.venv` folder has been generated within the `/backend` directory.
 
-### Frontend Setup
+## Run with Docker
 
-1. Navigate to the `frontend` folder.
-2. Install dependencies by running:
-```bash
-npm install
+Make sure to run this on the root directory.
+
+1. To run with Docker use the following command:
 ```
-3. Start the frontend development server with:
-````bash
-npm run dev
-````
-4. The frontend will now be accessible at http://localhost:3000 by default, providing a user interface.
+make build
+```
+2. To delete the container and image run:
+```
+make clean
+```
 
-## DEMO README
+## Interact with the API
 
-<h1 style="color:red">REPLACE THE CONTENT OF THIS README WITH `README-demo.md` and DELETE THE `README-demo.md` FILE!!!!!!!!! </h1>
+**_Note:_** Ensure that you leave the following folders empty: `data/your_project/your_demo/artifacts` and `data/your_project/your_demo/pdf-images`. Delete any existing folders and files in these folders.
+
+- Use the following endpoints to interact with the API:
+
+   1. `POST /cleandb`: Make a request to clean the database. 
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
+   2. `POST /setuprag`: Make a request to set up the RAG model.
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
+   3. `POST /querythepdf`: Once the RAG model is set up, make a request to query the PDFs.
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo", "query": "Write your query here..." }`.
+
+**_Note:_** Above requests are made to the local server, so make sure the server is running. Make sure to execute the requests in the order mentioned above. Once the RAG model is set up, you can query the PDFs multiple times.
+
+## To connect with Frontend: Configure the Environment Variables for the frontend
+
+1. Where you have the frontend code, create a `.env.local` file.
+2. In the `frontend` folder, create a `.env.local` file.
+3. Add the URL for the API using the following format:
+
+```bash
+NEXT_PUBLIC_ASK_THE_PDF_API_URL="http://localhost:8000/querythepdf"
+```
+
+## Common errors
+
+### Backend
+
+- Check that you've created an `.env` file that contains your valid (and working) API keys, environment and index variables.
