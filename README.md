@@ -1,4 +1,4 @@
-# Backend RAG with AWS Bedrock, LangChain, and MongoDB Atlas Vector Search
+# Backend RAG using MongoDB Atlas Vector Search, AWS Bedrock and Superduper, implemented in Python
 
 Backend service for retrieval-augmented generation (RAG) using AWS Bedrock, Superduper, and MongoDB Atlas Vector Search, implemented in Python.
 
@@ -83,6 +83,16 @@ ORIGINS_LOCAL=http://localhost:3000
     ````
 6. Verify that the `.venv` folder has been generated within the `/backend` directory.
 
+### To connect with Frontend
+
+1. Where you have the frontend code, create a `.env.local` file.
+2. In the `frontend` folder, create a `.env.local` file.
+3. Add the URL for the API using the following format:
+
+```bash
+NEXT_PUBLIC_ASK_THE_PDF_API_URL="http://localhost:8000/querythepdf"
+```
+
 ## Run with Docker
 
 Make sure to run this on the root directory.
@@ -110,16 +120,6 @@ make clean
       -  Body: `{ "industry": "your_project", "demo_name": "your_demo", "query": "Write your query here..." }`.
 
 **_Note:_** Above requests are made to the local server, so make sure the server is running. Make sure to execute the requests in the order mentioned above. Once the RAG model is set up, you can query the PDFs multiple times.
-
-## To connect with Frontend: Configure the Environment Variables for the frontend
-
-1. Where you have the frontend code, create a `.env.local` file.
-2. In the `frontend` folder, create a `.env.local` file.
-3. Add the URL for the API using the following format:
-
-```bash
-NEXT_PUBLIC_ASK_THE_PDF_API_URL="http://localhost:8000/querythepdf"
-```
 
 ## Common errors
 
