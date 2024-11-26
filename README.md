@@ -52,7 +52,7 @@ PDF_FOLDER = "data/your_project/your_demo/pdfs"
 PDFS = ["my_pdf_to_index1.pdf", "my_pdf_to_index2.pdf"] # Add the PDFs you want to index, make sure they are in the PDF_FOLDER
 EMBEDDING_MODEL = "cohere.embed-english-v3"
 CHAT_COMPLETION_MODEL = "anthropic.claude-3-haiku-20240307-v1:0"
-ORIGINS_LOCAL=http://localhost:3000
+ORIGINS=http://localhost:3000
 ```
 
 ### Step 2: Configure AWS Account
