@@ -106,9 +106,9 @@ class BaseConfig(ABC):
             self.origins_local = self.origins["local"]
             self.origins_prod = self.origins["prod"]
         else:
-            self.origins = None
-            self.origins_local = os.getenv("ORIGINS_LOCAL")
-            self.origins_prod = os.getenv("ORIGINS_PROD")
+            self.origins = os.getenv("ORIGINS")
+            self.origins_local = os.getenv("ORIGINS")
+            self.origins_prod = os.getenv("ORIGINS")
 
     @abstractmethod
     def execute(self):

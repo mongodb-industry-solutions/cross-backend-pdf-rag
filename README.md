@@ -83,6 +83,34 @@ ORIGINS=http://localhost:3000
     ````
 6. Verify that the `.venv` folder has been generated within the `/backend` directory.
 
+## Interact with the API
+
+Start the server by running the following commands:
+   1. Make sure to be over `/backend` directory. 
+        ```bash
+         cd backend
+         ```
+   2. Start the server.
+        ```bash
+         poetry run uvicorn main:app --host 0.0.0.0 --port 8000
+         ```
+
+**_Note:_** The server will be running on `http://localhost:8000`.
+
+
+Ensure that you leave the following folders empty: `data/your_project/your_demo/artifacts` and `data/your_project/your_demo/pdf-images`. Delete any existing folders and files in these folders.
+
+- Use the following endpoints to interact with the API:
+
+   1. `POST /cleandb`: Make a request to clean the database. 
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
+   2. `POST /setuprag`: Make a request to set up the RAG model.
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
+   3. `POST /querythepdf`: Once the RAG model is set up, make a request to query the PDFs.
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo", "query": "Write your query here..." }`.
+
+**_Note:_** Above requests are made to the local server, so make sure the server is running. Make sure to execute the requests in the order mentioned above. Once the RAG model is set up, you can query the PDFs multiple times.
+
 ### To connect with Frontend
 
 1. Where you have the frontend code, create a `.env.local` file.
@@ -105,21 +133,6 @@ make build
 ```
 make clean
 ```
-
-## Interact with the API
-
-**_Note:_** Ensure that you leave the following folders empty: `data/your_project/your_demo/artifacts` and `data/your_project/your_demo/pdf-images`. Delete any existing folders and files in these folders.
-
-- Use the following endpoints to interact with the API:
-
-   1. `POST /cleandb`: Make a request to clean the database. 
-      -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
-   2. `POST /setuprag`: Make a request to set up the RAG model.
-      -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
-   3. `POST /querythepdf`: Once the RAG model is set up, make a request to query the PDFs.
-      -  Body: `{ "industry": "your_project", "demo_name": "your_demo", "query": "Write your query here..." }`.
-
-**_Note:_** Above requests are made to the local server, so make sure the server is running. Make sure to execute the requests in the order mentioned above. Once the RAG model is set up, you can query the PDFs multiple times.
 
 ## Common errors
 
