@@ -49,7 +49,7 @@ AWS_S3_ENABLED = False
 AWS_S3_BUCKET = 
 AWS_S3_PDF_FOLDER = 
 PDF_FOLDER = "data/your_project/your_demo/pdfs"
-PDFS = ["my_pdf_to_index1.pdf", "my_pdf_to_index2.pdf"] # Add the PDFs you want to index, make sure they are in the PDF_FOLDER
+PDFS = ["personal-banking-terms-conditions.pdf"] # Add the PDFs you want to index, make sure they are in the PDF_FOLDER
 EMBEDDING_MODEL = "cohere.embed-english-v3"
 CHAT_COMPLETION_MODEL = "anthropic.claude-3-haiku-20240307-v1:0"
 ORIGINS=http://localhost:3000
@@ -82,8 +82,9 @@ ORIGINS=http://localhost:3000
     make poetry_install
     ````
 6. Verify that the `.venv` folder has been generated within the `/backend` directory.
+7. Make sure to select the Python interpreter from the `.venv` folder. You can change this in Visual Studio Code by clicking on the Python version in the bottom left corner, or searching by `Python: Select Interpreter` in the command palette. For this project, the Python interpreter should be located at `./backend/.venv/bin/python`.
 
-## Interact with the API
+### Interact with the API
 
 Start the server by running the following commands:
    1. Make sure to be over `/backend` directory. 
@@ -107,7 +108,7 @@ Ensure that you leave the following folders empty: `data/your_project/your_demo/
    2. `POST /setuprag`: Make a request to set up the RAG model.
       -  Body: `{ "industry": "your_project", "demo_name": "your_demo" }`.
    3. `POST /querythepdf`: Once the RAG model is set up, make a request to query the PDFs.
-      -  Body: `{ "industry": "your_project", "demo_name": "your_demo", "query": "Write your query here..." }`.
+      -  Body: `{ "industry": "your_project", "demo_name": "your_demo", "guidelines": "personal-banking-terms-conditions.pdf", "query": "Am I going to be notified when overdraft interests will be charged?" }`.
 
 **_Note:_** Above requests are made to the local server, so make sure the server is running. Make sure to execute the requests in the order mentioned above. Once the RAG model is set up, you can query the PDFs multiple times.
 
@@ -121,9 +122,11 @@ Ensure that you leave the following folders empty: `data/your_project/your_demo/
 NEXT_PUBLIC_ASK_THE_PDF_API_URL="http://localhost:8000/querythepdf"
 ```
 
-## Run with Docker
+## Run with Docker (Preferred)
 
-Make sure to run this on the root directory.
+Prerequisites:
+- Docker Desktop installed on your machine.
+- Docker Desktop running on your machine.
 
 1. To run with Docker use the following command:
 ```
@@ -134,8 +137,10 @@ make build
 make clean
 ```
 
-## Common errors
+### Interact with the API
 
-### Backend
+You can imitate the same steps as mentioned above to interact with the API.
+
+## Common errors
 
 - Check that you've created an `.env` file that contains your valid (and working) API keys, environment and index variables.
