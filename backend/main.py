@@ -136,6 +136,7 @@ async def query_db_endpoint(request: Request):
     industry = data.get("industry")
     demo_name = data.get("demo_name")
     query = data.get("query")
+    guidelines = data.get("guidelines")
 
     # Check if model_rag is cached
     model_rag_instance = get_model_rag(industry, demo_name)
@@ -143,7 +144,7 @@ async def query_db_endpoint(request: Request):
         return {"message": "Make sure to execute 1. /cleandb and 2. /setuprag before running queries!"}
 
     try:
-        result = model_rag_instance.predict(query, top_k=5, format_result=True)
+        result = model_rag_instance.predict(query, guidelines, top_k=7, format_result=True)
         logging.info("Response Answer:")
         logging.info(result["answer"])
         logging.info("Response Images:")

@@ -12,8 +12,8 @@ from typing import List
 from dataclasses import dataclass
 
 @dataclass
-class BedrockChatCompletion(Model):
-    """ A class to generate chat completions using Bedrock text models. """
+class BedrockAnthropicChatCompletions(Model):
+    """ A class to generate chat completions using Bedrock's Anthropic models"""
     # Reference: https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-runtime_example_bedrock-runtime_InvokeModel_AnthropicClaude_section.html
 
     signature: str = 'singleton'
@@ -89,8 +89,8 @@ class BedrockChatCompletion(Model):
 #     aws_secret_access_key = ""
 #     aws_region = ""
 
-#     # Example usage of the BedrockChatCompletion class.
-#     chat_completion = BedrockChatCompletion(
+#     # Example usage of the BedrockAnthropicChatCompletions class.
+#     chat_completion = BedrockAnthropicChatCompletions(
 #         identifier='chat-completion',
 #         foundation_model=chat_completion_model,
 #         aws_access_key_id=aws_access_key_id,

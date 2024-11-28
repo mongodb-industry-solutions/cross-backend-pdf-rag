@@ -11,8 +11,8 @@ from superduper.components.vector_index import sqlvector
 from dataclasses import dataclass
 
 @dataclass
-class BedrockEmbeddings(Model):
-    """ A class to generate text embeddings using Bedrock embedding models. """
+class BedrockCohereEnglishEmbeddings(Model):
+    """ A class to generate text embeddings using the Cohere Embed English model. """
     # References:
     # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-embed.html
     # https://docs.cohere.com/reference/embed
@@ -94,14 +94,14 @@ class BedrockEmbeddings(Model):
 
 # if __name__ == '__main__':
 
-#     # Example usage of the BedrockEmbeddings class.
+#     # Example usage of the BedrockCohereEnglishEmbeddings class.
 #     embedding_model = "cohere.embed-english-v3" # You can change this to any other model
 #     aws_access_key_id = ""
 #     aws_secret_access_key = ""
 #     aws_region = ""
 
 #     # Build a vector index for vector search
-#     model_embedding = BedrockEmbeddings(
+#     model_embedding = BedrockCohereEnglishEmbeddings(
 #         identifier='text-embedding',
 #         foundation_model=embedding_model,
 #         aws_region=aws_region,

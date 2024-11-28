@@ -12,8 +12,8 @@ from superduper.components.vector_index import sqlvector
 
 from superduper import VectorIndex
 
-from bedrock.embeddings import BedrockEmbeddings
-from bedrock.chat_completion import BedrockChatCompletion
+from bedrock.embeddings import BedrockCohereEnglishEmbeddings
+from bedrock.chat_completion import BedrockAnthropicChatCompletions
 
 from superduper import Plugin
 from utils import Processor
@@ -82,7 +82,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str,
     db.apply(listener_chunk, force=True)
 
     # Build a vector index for vector search
-    model_embedding = BedrockEmbeddings(
+    model_embedding = BedrockCohereEnglishEmbeddings(
         identifier='text-embedding',
         foundation_model=embedding_model,
         aws_region=aws_region,
@@ -120,7 +120,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str,
     #### Rag class here: ./rag_model.py
     #### Imported as from rag_model import Rag
 
-    chat_completion = BedrockChatCompletion(
+    chat_completion = BedrockAnthropicChatCompletions(
         identifier='chat-completion',
         foundation_model=chat_completion_model,
         aws_region=aws_region,
