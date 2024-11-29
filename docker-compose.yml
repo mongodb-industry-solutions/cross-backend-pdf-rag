@@ -1,11 +1,11 @@
 services:
-  cross-pdf-rag-backend:
+  cross-backend-pdf-rag:
     build:
       context: .
       no_cache: true
       dockerfile: Dockerfile.backend
-    image: cross-pdf-rag-backend-image:latest
+    image: cross-backend-pdf-rag-image:latest
     ports:
       - "8000:8000"
     restart: always
-    container_name: cross-pdf-rag-backend-container
+    container_name: cross-backend-pdf-rag-container
