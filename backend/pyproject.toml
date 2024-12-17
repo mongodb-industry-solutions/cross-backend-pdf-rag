@@ -14,11 +14,11 @@ uvicorn = "^0.32.0"
 botocore = "^1.35.63"
 boto3 = "^1.35.63"
 pyyaml = "^6.0.2"
-unstructured = {extras = ["pdf"], version = "0.16.6"}
+loki-logger-handler = "1.0.0"
+pikepdf = "^9.4.2"
+unstructured = {extras = ["pdf"], version = "^0.16.11"}
 superduper-framework = "0.4.5"
 superduper-mongodb = "0.4.1"
-loki-logger-handler = "1.0.0"
-
 
 [build-system]
 requires = ["poetry-core"]

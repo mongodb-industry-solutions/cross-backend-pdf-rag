@@ -15,7 +15,7 @@ class BedrockClient:
     log: logging.Logger = logging.getLogger("BedrockClient")
     
     def __init__(self, aws_access_key: Optional[str] = None, aws_secret_key: Optional[str] = None,
-                 assumed_role: Optional[str] = None, region_name: Optional[str] = "eu-west-3") -> None:
+                 assumed_role: Optional[str] = None, region_name: Optional[str] = "us-east-1") -> None:
         self.region_name = region_name
         self.assumed_role = assumed_role
         self.aws_access_key = aws_access_key
