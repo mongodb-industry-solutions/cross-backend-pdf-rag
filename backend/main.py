@@ -2,12 +2,156 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
 from formatting import process_related_documents
+from contextlib import asynccontextmanager
 
 from pdf_rag import PDFRag
 
 from superduper import logging
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logging.info("Running startup setup...")
+    # Initial setup tasks here
+    # For example, you can initialize some global variables or check connections
+    # You can also call any setup functions needed for your application
+
+    # Example: Initialize a global variable
+    # Making sure I am using global variables
+    global db_cache, model_rag_cache
+    db_cache = {}
+    model_rag_cache = {}
+
+    ##########################################
+    # FSI Leafy Bank Assistant startup setup
+    ##########################################
+
+    FSI_INDUSTRY = "fsi"
+    FSI_DEMO_NAME = "leafy_bank_assistant"
+
+    fsi_pdf_startup = PDFRag(industry=FSI_INDUSTRY, demo_name=FSI_DEMO_NAME)
+
+    logging.info("Setting up Leafy Bank Assistant database...")
+
+    logging.info("Industry:")
+    logging.info(fsi_pdf_startup.industry)
+    logging.info("Demo:")
+    logging.info(fsi_pdf_startup.demo_name)
+
+    logging.info("Cleaning up database...")
+    fsi_pdf_startup.clean_db()
+
+    # Clear cached variables for the specific industry and demo_name
+    key = get_cache_key(fsi_pdf_startup.industry, fsi_pdf_startup.demo_name)
+    if key in db_cache:
+        del db_cache[key]
+        logging.info(f"Cleared db cache for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
+    else:
+        logging.info(f"No db_cache found for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
+    if key in model_rag_cache:
+        del model_rag_cache[key]
+        logging.info(f"Cleared model_rag cache for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
+    else:
+        logging.info(f"No model_rag_cache found for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
+
+    # Check and create the folders
+    fsi_pdf_startup.check_and_create_folders()
+
+    # Download the PDF files from the S3 bucket if enabled
+    if fsi_pdf_startup.aws_s3_enabled or fsi_pdf_startup.aws_s3_enabled == "True":
+        logging.info(f"AWS_S3_ENABLED is {fsi_pdf_startup.aws_s3_enabled}")
+        logging.info("Downloading PDF files from S3 bucket...")
+        fsi_pdf_startup.download_pdf_files_from_s3()
+    else:
+        logging.info(f"AWS_S3_ENABLED is {fsi_pdf_startup.aws_s3_enabled}")
+        logging.info("Skipping download from S3 bucket...")
+
+    # Check if db and model_rag are already cached
+    db_instance = get_db(fsi_pdf_startup.industry, fsi_pdf_startup.demo_name)
+    model_rag_instance = get_model_rag(fsi_pdf_startup.industry, fsi_pdf_startup.demo_name)
+
+    if not db_instance or not model_rag_instance:
+        logging.info("Setting up...")  
+        # Initialize db and model_rag if not cached
+        db_instance, model_rag_instance = fsi_pdf_startup.setup_rag()
+        # Store them in the cache
+        set_db(fsi_pdf_startup.industry, fsi_pdf_startup.demo_name, db_instance)
+        set_model_rag(fsi_pdf_startup.industry, fsi_pdf_startup.demo_name, model_rag_instance)
+    else:
+        logging.info("Using cached instances...")
+
+    logging.info("Leafy Bank Assistant database and Model RAG have been successfully set!")
+
+    ##########################################
+    ##########################################
+
+    ##########################################
+    # Insurance PDF Search startup setup
+    ##########################################
+
+    INSURANCE_INDUSTRY = "insurance"
+    INSURANCE_DEMO_NAME = "pdf_search"
+
+    insurance_pdf_startup = PDFRag(industry=INSURANCE_INDUSTRY, demo_name=INSURANCE_DEMO_NAME)
+
+    logging.info("Setting up Insurance PDF Search database...")
+
+    logging.info("Industry:")
+    logging.info(insurance_pdf_startup.industry)
+    logging.info("Demo:")
+    logging.info(insurance_pdf_startup.demo_name)
+
+    logging.info("Cleaning up database...")
+    insurance_pdf_startup.clean_db()
+
+    # Clear cached variables for the specific industry and demo_name
+    key = get_cache_key(insurance_pdf_startup.industry, insurance_pdf_startup.demo_name)
+    if key in db_cache:
+        del db_cache[key]
+        logging.info(f"Cleared db cache for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
+    else:
+        logging.info(f"No db_cache found for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
+    if key in model_rag_cache:
+        del model_rag_cache[key]
+        logging.info(f"Cleared model_rag cache for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
+    else:
+        logging.info(f"No model_rag_cache found for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
+
+    # Check and create the folders
+    insurance_pdf_startup.check_and_create_folders()
+
+    # Download the PDF files from the S3 bucket if enabled
+    if insurance_pdf_startup.aws_s3_enabled or insurance_pdf_startup.aws_s3_enabled == "True":
+        logging.info(f"AWS_S3_ENABLED is {insurance_pdf_startup.aws_s3_enabled}")
+        logging.info("Downloading PDF files from S3 bucket...")
+        insurance_pdf_startup.download_pdf_files_from_s3()
+    else:
+        logging.info(f"AWS_S3_ENABLED is {insurance_pdf_startup.aws_s3_enabled}")
+        logging.info("Skipping download from S3 bucket...")
+
+    # Check if db and model_rag are already cached
+    db_instance = get_db(insurance_pdf_startup.industry, insurance_pdf_startup.demo_name)
+    model_rag_instance = get_model_rag(insurance_pdf_startup.industry, insurance_pdf_startup.demo_name)
+
+    if not db_instance or not model_rag_instance:
+        logging.info("Setting up...")  
+        # Initialize db and model_rag if not cached
+        db_instance, model_rag_instance = insurance_pdf_startup.setup_rag()
+        # Store them in the cache
+        set_db(insurance_pdf_startup.industry, insurance_pdf_startup.demo_name, db_instance)
+        set_model_rag(insurance_pdf_startup.industry, insurance_pdf_startup.demo_name, model_rag_instance)
+    else:
+        logging.info("Using cached instances...")
+
+    logging.info("Insurance PDF Search database and Model RAG have been successfully set!")
+
+    ##########################################
+    ##########################################
+    
+    logging.info("Startup setup completed.")
+    yield
+    logging.info("Shutting down...")
+
+app = FastAPI(lifespan=lifespan)
 
 # CORS middleware configuration
 app.add_middleware(
@@ -18,10 +162,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 router = APIRouter()
-
-# Global dictionaries for caching
-db_cache = {}
-model_rag_cache = {}
 
 def get_cache_key(industry: str, demo_name: str):
     """Generate a unique cache key based on industry and demo_name."""
