@@ -28,8 +28,6 @@ class BaseConfig(ABC):
     aws_region (str): AWS region for the S3 bucket and other AWS services.
     secret_manager (boto3.client): Boto3 Secrets Manager client.
     aws_user_secret (Dict): AWS user secret containing access key ID and secret access key.
-    aws_access_key_id (str): AWS access key ID.
-    aws_secret_access_key (str): AWS secret access key.
     mdb_url_secret (Dict): MongoDB URL secret containing cluster name, username, and password.
     mdb_clustername (str): MongoDB cluster name.
     mdb_username (str): MongoDB username.
@@ -57,21 +55,14 @@ class BaseConfig(ABC):
         self.demo_config = self.industry_config[self.demo_name] or None
 
         self.aws_region = self.demo_config["aws_region"] or os.getenv("AWS_REGION")
-        self.aws_access_key_id = self.demo_config["aws_access_key_id"] or os.getenv("AWS_ACCESS_KEY_ID")
-        self.aws_secret_access_key = self.demo_config["aws_secret_access_key"] or os.getenv("AWS_SECRET_ACCESS_KEY")
 
         # Create a AWS Boto3 Session
         self.session = boto3.session.Session(
-            aws_access_key_id=self.aws_access_key_id,
-            aws_secret_access_key=self.aws_secret_access_key,
             region_name=self.aws_region
         )
 
         # Create a Secrets Manager client
-        self.secret_manager = self.session.client('secretsmanager',
-                                region_name=self.aws_region,
-                                aws_access_key_id=self.aws_access_key_id,
-                                aws_secret_access_key=self.aws_secret_access_key)
+        self.secret_manager = self.session.client('secretsmanager', region_name=self.aws_region)
 
         # Get the MongoDB URL secret
         if self.demo_config["mdb_url_secret"]:
@@ -93,10 +84,7 @@ class BaseConfig(ABC):
             self.mdb_uri = os.getenv("MONGODB_URI")
 
         # Create an S3 client
-        self.s3 = self.session.client(service_name='s3',
-                                region_name=self.aws_region,
-                                aws_access_key_id=self.aws_access_key_id,
-                                aws_secret_access_key=self.aws_secret_access_key)
+        self.s3 = self.session.client(service_name='s3', region_name=self.aws_region)
         
         if self.config["hosting"]["origins"]:
             # Origins
@@ -176,42 +164,6 @@ class BaseConfig(ABC):
         # Allow getting string secrets
         except ValueError:
             return secret_response['SecretString']
-
-    def upload_file_to_s3(
-            self,
-            file_name: str,
-            bucket: str,
-            object_name: str = None,
-            s3_client=None
-    ):
-        """
-        Upload a file to an S3 bucket.
-
-        Parameters:
-        file_name (str): File to upload.
-        bucket (str): Bucket to upload to.
-        object_name (str, optional): S3 object name. If not specified, file_name is used.
-        s3_client: Optional S3 client to use. If not provided, the default client is used.
-
-        Returns:
-        bool: True if file was uploaded, else False.
-        """
-        if s3_client is not None:
-            s3 = s3_client
-        else:
-            if self.s3 is None:
-                self.s3 = boto3.client('s3')
-            s3 = self.s3
-
-        if object_name is None:
-            object_name = file_name
-
-        try:
-            s3.upload_file(file_name, bucket, object_name)
-        except ClientError as e:
-            logging.error(e)
-            return False
-        return True
 
     def download_file_from_s3(
             self,

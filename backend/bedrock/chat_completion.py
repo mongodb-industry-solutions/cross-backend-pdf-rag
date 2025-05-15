@@ -19,17 +19,13 @@ class BedrockAnthropicChatCompletions(Model):
     signature: str = 'singleton'
     foundation_model: str = None
     aws_region: str = None
-    aws_access_key_id: str = None
-    aws_secret_access_key: str = None
     batch_size: int = 1
     prompt: str = ''
 
     def __post_init__(self, db, artifacts, example):
-        if not self.aws_region or not self.aws_access_key_id or not self.aws_secret_access_key or not self.foundation_model:
-            raise ValueError("aws_region, aws_access_key_id, aws_secret_access_key, and foundation_model must be provided and cannot be None.")
+        if not self.aws_region or not self.foundation_model:
+            raise ValueError("aws_region and foundation_model must be provided and cannot be None.")
         self.bedrock_client = BedrockClient(
-            aws_access_key=self.aws_access_key_id,
-            aws_secret_key=self.aws_secret_access_key,
             region_name=self.aws_region
         )._get_bedrock_client()
         return super().__post_init__(db, artifacts, example)
@@ -80,28 +76,3 @@ class BedrockAnthropicChatCompletions(Model):
         with ThreadPoolExecutor(max_workers=num_threads) as executor:
             results = List(tqdm.tqdm(executor.map(self.predict, texts), total=len(texts)))
         return results
-
-
-# if __name__ == '__main__':
-
-#     chat_completion_model = "anthropic.claude-3-haiku-20240307-v1:0"  # You can change this to any other model
-#     aws_access_key_id = ""
-#     aws_secret_access_key = ""
-#     aws_region = ""
-
-#     # Example usage of the BedrockAnthropicChatCompletions class.
-#     chat_completion = BedrockAnthropicChatCompletions(
-#         identifier='chat-completion',
-#         foundation_model=chat_completion_model,
-#         aws_access_key_id=aws_access_key_id,
-#         aws_secret_access_key=aws_secret_access_key,
-#         aws_region=aws_region
-#     )
-
-#     # Example prompt for the chat completion model.
-#     prompt = "What is the meaning of life?"
-
-#     # Generate a chat completion based on the prompt.
-#     result = chat_completion.predict(prompt)
-
-#     print(result)

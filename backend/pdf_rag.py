@@ -132,9 +132,7 @@ class PDFRag(BaseConfig):
         logging.info("Setting up the RAG model for PDFs...")
         db, model_rag = rag_setup(
             mongodb_uri = self.mdb_uri, 
-            artifact_store = self.artifacts_store, 
-            aws_access_key_id = self.aws_access_key_id,
-            aws_secret_access_key = self.aws_secret_access_key, 
+            artifact_store = self.artifacts_store,
             aws_region = self.aws_region,
             pdf_folder = self.pdf_folder,
             embedding_model = self.embedding_model,

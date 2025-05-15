@@ -43,8 +43,6 @@ Before you begin, ensure you have met the following requirements:
 MONGODB_URI = "mongodb+srv://<REPLACE_USERNAME>:<REPLACE_PASSWORD>@<REPLACE_CLUSTER_NAME>.mongodb.net/<REPLACE_DATABASE_NAME>"
 ARTIFACT_STORE = "data/your_project/your_demo/artifacts"
 AWS_REGION = "<REPLACE_AWS_REGION>"
-AWS_ACCESS_KEY_ID = "<REPLACE_AWS_ACCESS_KEY>"
-AWS_SECRET_ACCESS_KEY = "<REPLACE_AWS_SECRET_ACCESS_KEY>"
 AWS_S3_ENABLED = False
 AWS_S3_BUCKET = 
 AWS_S3_PDF_FOLDER = 
