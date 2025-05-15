@@ -27,7 +27,6 @@ class BaseConfig(ABC):
     demo_config (Dict): Configuration dictionary for the specified demo.
     aws_region (str): AWS region for the S3 bucket and other AWS services.
     secret_manager (boto3.client): Boto3 Secrets Manager client.
-    aws_user_secret (Dict): AWS user secret containing access key ID and secret access key.
     mdb_url_secret (Dict): MongoDB URL secret containing cluster name, username, and password.
     mdb_clustername (str): MongoDB cluster name.
     mdb_username (str): MongoDB username.
