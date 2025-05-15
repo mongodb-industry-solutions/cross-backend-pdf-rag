@@ -21,8 +21,7 @@ from utils import Processor
 from superduper import Table
 
 # Based on https://github.com/superduper-io/superduper/blob/main/templates/pdf_rag/build.ipynb
-def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str,
-             aws_access_key_id: str, aws_secret_access_key: str, aws_region: str,
+def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region: str,
              embedding_model: str, chat_completion_model: str,
              source_collection_name: str = "source"):
     
@@ -86,8 +85,6 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str,
         identifier='text-embedding',
         foundation_model=embedding_model,
         aws_region=aws_region,
-        aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key,
         datatype=sqlvector(shape=(1536,))
     )
 
@@ -123,9 +120,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str,
     chat_completion = BedrockAnthropicChatCompletions(
         identifier='chat-completion',
         foundation_model=chat_completion_model,
-        aws_region=aws_region,
-        aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key
+        aws_region=aws_region
     )
 
     prompt_template = (

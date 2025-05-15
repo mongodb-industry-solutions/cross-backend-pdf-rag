@@ -21,15 +21,11 @@ class BedrockCohereEnglishEmbeddings(Model):
     foundation_model: str = None
     batch_size: int = 100
     aws_region: str = None
-    aws_access_key_id: str = None
-    aws_secret_access_key: str = None
 
     def __post_init__(self, db, artifacts, example):
-        if not self.aws_region or not self.aws_access_key_id or not self.aws_secret_access_key or not self.foundation_model:
-            raise ValueError("aws_region, aws_access_key_id, aws_secret_access_key, and foundation_model must be provided and cannot be None.")
+        if not self.aws_region or not self.foundation_model:
+            raise ValueError("aws_region and foundation_model must be provided and cannot be None.")
         self.bedrock_client = BedrockClient(
-            aws_access_key=self.aws_access_key_id,
-            aws_secret_key=self.aws_secret_access_key,
             region_name=self.aws_region
         )._get_bedrock_client()
         return super().__post_init__(db, artifacts, example)
@@ -90,24 +86,3 @@ class BedrockCohereEnglishEmbeddings(Model):
             results = list(tqdm.tqdm(executor.map(
                 self.predict, texts), total=len(texts)))
         return results
-
-
-# if __name__ == '__main__':
-
-#     # Example usage of the BedrockCohereEnglishEmbeddings class.
-#     embedding_model = "cohere.embed-english-v3" # You can change this to any other model
-#     aws_access_key_id = ""
-#     aws_secret_access_key = ""
-#     aws_region = ""
-
-#     # Build a vector index for vector search
-#     model_embedding = BedrockCohereEnglishEmbeddings(
-#         identifier='text-embedding',
-#         foundation_model=embedding_model,
-#         aws_region=aws_region,
-#         aws_access_key_id=aws_access_key_id,
-#         aws_secret_access_key=aws_secret_access_key,
-#         datatype=sqlvector(shape=(1536,))
-#     )
-
-#     print(model_embedding.predict('Embed this text.'))
