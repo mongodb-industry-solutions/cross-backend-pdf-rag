@@ -56,8 +56,11 @@ ORIGINS=http://localhost:3000
 ### Step 2: Configure AWS Account
 
 1. Create an AWS account if you don't have one.
-2. Add the AWS Access Key ID and Secret Access Key to the environment variables in the `.env` file.
-3. Grant the necessary permissions to the AWS account: `AmazonBedrockFullAccess`, but in case you enable S3, you will need to add `AmazonS3FullAccess` and `SecretsManagerReadWrite` permissions. There are some varibles in the `.env` file that you can use to enable or disable the S3 integration.
+2. Authenticate your AWS account using the AWS CLI. Normally, you can do this by running the following command:
+   ```bash
+   aws sso login --profile your-profile
+   ```
+3. Grant the necessary permissions to the AWS account: `AmazonBedrockFullAccess`, but in case you enable S3, you will need to add `AmazonS3ReadOnlyAccess` and `SecretsManagerReadWrite` permissions. There are some varibles in the `.env` file that you can use to enable or disable the S3 integration.
 
 ## Run it Locally
 
