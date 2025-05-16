@@ -5,6 +5,7 @@ import os.path as op
 import yaml
 import boto3
 from botocore.exceptions import ClientError
+from botocore.config import Config
 import logging
 
 import os
@@ -53,15 +54,35 @@ class BaseConfig(ABC):
         self.industry_config = self.config[self.industry] or None
         self.demo_config = self.industry_config[self.demo_name] or None
 
-        self.aws_region = self.demo_config["aws_region"] or os.getenv("AWS_REGION")
+        self.aws_region = self.demo_config["aws_region"] or os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION")
 
-        # Create a AWS Boto3 Session
-        self.session = boto3.session.Session(
-            region_name=self.aws_region
+        # Create a AWS Boto3 Session with improved configuration
+        session_kwargs = {"region_name": self.aws_region}
+        
+        # Check if AWS_PROFILE is set
+        profile_name = os.environ.get("AWS_PROFILE")
+        if profile_name:
+            logging.info(f"Using AWS profile: {profile_name}")
+            session_kwargs["profile_name"] = profile_name
+            
+        # Create session with retry configuration
+        retry_config = Config(
+            region_name=self.aws_region,
+            retries={
+                "max_attempts": 10,
+                "mode": "standard",
+            },
         )
-
-        # Create a Secrets Manager client
-        self.secret_manager = self.session.client('secretsmanager', region_name=self.aws_region)
+        
+        self.session = boto3.session.Session(**session_kwargs)
+        
+        # When in ECS, the task role credentials will be automatically picked up
+        # Create a Secrets Manager client with retry configuration
+        self.secret_manager = self.session.client(
+            'secretsmanager', 
+            region_name=self.aws_region,
+            config=retry_config
+        )
 
         # Get the MongoDB URL secret
         if self.demo_config["mdb_url_secret"]:
@@ -82,8 +103,12 @@ class BaseConfig(ABC):
             self.mdb_password = None
             self.mdb_uri = os.getenv("MONGODB_URI")
 
-        # Create an S3 client
-        self.s3 = self.session.client(service_name='s3', region_name=self.aws_region)
+        # Create an S3 client with retry configuration
+        self.s3 = self.session.client(
+            service_name='s3', 
+            region_name=self.aws_region,
+            config=retry_config
+        )
         
         if self.config["hosting"]["origins"]:
             # Origins
