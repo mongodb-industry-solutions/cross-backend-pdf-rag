@@ -1,103 +1,49 @@
 # This is for internal use only. Do not change or delete this file and its content.
 # To configure the application, please use the .env file
 
-example:
-  example:
-    mdb_url_secret: 
-    mdb_database: 
-    aws_access_key_id: 
-    aws_secret_access_key: 
-    aws_region: 
-    aws_s3_enabled: 
-    aws_s3_bucket: 
-    aws_s3_pdf_folder: 
-    pdf_folder: 
-    pdfs: 
-    artifacts_store: 
-    embedding_model: 
-    chat_completion_model: 
-
-example_project:
-  example_demo:
-    mdb_url_secret: 
-    mdb_database: 
-    aws_access_key_id: 
-    aws_secret_access_key: 
-    aws_region: 
-    aws_s3_enabled: 
-    aws_s3_bucket: 
-    aws_s3_pdf_folder: 
-    pdf_folder: 
-    pdfs: 
-    artifacts_store: 
-    embedding_model: 
-    chat_completion_model: 
-
-your_project:
-  your_demo:
-    mdb_url_secret: 
-    mdb_database: 
-    aws_access_key_id: 
-    aws_secret_access_key: 
-    aws_region: 
-    aws_s3_enabled: 
-    aws_s3_bucket: 
-    aws_s3_pdf_folder: 
-    pdf_folder: 
-    pdfs: 
-    artifacts_store: 
-    embedding_model: 
-    chat_completion_model: 
-
 my_industry:
   my_demo:
-    mdb_url_secret: 
-    mdb_database: 
-    aws_access_key_id: 
-    aws_secret_access_key: 
-    aws_region: 
-    aws_s3_enabled: 
-    aws_s3_bucket: 
-    aws_s3_pdf_folder: 
-    pdf_folder: 
-    pdfs: 
-    artifacts_store: 
-    embedding_model: 
-    chat_completion_model: 
+    mdb_url_secret: "ist/demos/fsi/mdb/uri"
+    mdb_database: "my_demo_pdf_rag"
+    aws_region: "us-east-1"
+    aws_s3_enabled: True
+    aws_s3_bucket: "industry-solutions-demos"
+    aws_s3_pdf_folder: "industry/fsi/leafybank/leafy_bank_assistant/pdf-folder/"
+    pdf_folder: "data/my_industry/my_demo/pdfs"
+    pdfs: ["personal-banking-terms-conditions.pdf"]
+    artifacts_store: "data/my_industry/my_demo/artifacts"
+    embedding_model: "cohere.embed-english-v3"
+    chat_completion_model: "anthropic.claude-3-haiku-20240307-v1:0"
 
 fsi:
   leafy_bank_assistant:
-    mdb_url_secret: 
-    mdb_database: 
-    aws_access_key_id: 
-    aws_secret_access_key: 
-    aws_region: 
-    aws_s3_enabled: 
-    aws_s3_bucket: 
-    aws_s3_pdf_folder: 
-    pdf_folder: 
-    pdfs: 
-    artifacts_store: 
-    embedding_model: 
-    chat_completion_model: 
+    mdb_url_secret: "ist/demos/fsi/mdb/uri"
+    mdb_database: "leafy_bank_assistant"
+    aws_region: "us-east-1"
+    aws_s3_enabled: True
+    aws_s3_bucket: "industry-solutions-demos"
+    aws_s3_pdf_folder: "industry/fsi/leafybank/leafy_bank_assistant/pdf-folder/"
+    pdf_folder: "data/fsi/leafy_bank_assistant/pdfs"
+    pdfs: ["personal-banking-terms-conditions.pdf"]
+    artifacts_store: "data/fsi/leafy_bank_assistant/artifacts"
+    embedding_model: "cohere.embed-english-v3"
+    chat_completion_model: "anthropic.claude-3-haiku-20240307-v1:0"
 
 insurance:
   pdf_search:
-    mdb_url_secret: 
-    mdb_database: 
-    aws_access_key_id: 
-    aws_secret_access_key: 
-    aws_region: 
-    aws_s3_enabled: 
-    aws_s3_bucket: 
-    aws_s3_pdf_folder: 
-    pdf_folder: 
-    pdfs: 
-    artifacts_store: 
-    embedding_model: 
-    chat_completion_model: 
+    mdb_url_secret: "ist/demos/insurance/mdb/uri"
+    mdb_database: "insurance_pdf_search"
+    aws_region: "us-east-1"
+    aws_s3_enabled: True
+    aws_s3_bucket: "industry-solutions-demos"
+    aws_s3_pdf_folder: "industry/insurance/pdf_rag/pdf_search/pdf-folder/"
+    pdf_folder: "data/insurance/pdf_search/pdfs"
+    pdfs: ["guidlines_insurance_ny.pdf", "guidlines_risk_management_singapore.pdf"]
+    artifacts_store: "data/insurance/pdf_search/artifacts"
+    embedding_model: "cohere.embed-english-v3"
+    chat_completion_model: "anthropic.claude-3-haiku-20240307-v1:0"
 
 hosting:
   origins:
-    local: 
-    prod: 
+    local: "http://localhost:3000"
+    prod: "https://cross-backend-pdf-rag.api.mongodb-industry-solutions.com"
