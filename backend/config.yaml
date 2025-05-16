@@ -46,4 +46,4 @@ insurance:
 hosting:
   origins:
     local: "http://localhost:3000"
-    prod: "https://cross-backend-pdf-rag.api.mongodb-industry-solutions.com"
+    prod:
