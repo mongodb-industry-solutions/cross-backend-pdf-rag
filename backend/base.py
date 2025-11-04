@@ -93,7 +93,14 @@ class BaseConfig(ABC):
             # Construct the MongoDB URI
             self.mdb_uri_no_db = f"mongodb+srv://{self.mdb_username}:{self.mdb_password}@{self.mdb_clustername}/"
             # Get the MongoDB database name
-            self.mdb_database = self.demo_config["mdb_database"]
+            if os.environ.get("NODE_ENV") != "prod":
+                self.mdb_database = self.demo_config["mdb_database"] + "_stg"
+            else:
+                self.mdb_database = self.demo_config["mdb_database"]
+            # ================================
+            logging.info(f"NODE_ENV: {os.environ.get('NODE_ENV')}")
+            logging.info(f"MongoDB database name: {self.mdb_database}")
+            # ================================
             # Construct the MongoDB URI with the database name
             self.mdb_uri = f"mongodb+srv://{self.mdb_username}:{self.mdb_password}@{self.mdb_clustername}/{self.mdb_database}"
         else:
@@ -109,18 +116,6 @@ class BaseConfig(ABC):
             region_name=self.aws_region,
             config=retry_config
         )
-        
-        if self.config["hosting"]["origins"]:
-            # Origins
-            self.origins = self.config["hosting"]["origins"]
-            
-            # Local and Prod origins
-            self.origins_local = self.origins["local"]
-            self.origins_prod = self.origins["prod"]
-        else:
-            self.origins = os.getenv("ORIGINS")
-            self.origins_local = os.getenv("ORIGINS")
-            self.origins_prod = os.getenv("ORIGINS")
 
     @abstractmethod
     def execute(self):
