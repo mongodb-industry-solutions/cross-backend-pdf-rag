@@ -3,10 +3,31 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
 from formatting import process_related_documents
 from contextlib import asynccontextmanager
-
+from pydantic import BaseModel, Field
 from pdf_rag import PDFRag
 
 from superduper import logging
+
+# Pydantic models for request bodies
+class CleanDbRequest(BaseModel):
+    """Request model for cleaning the database."""
+    industry: str = Field(..., description="Industry name (e.g., 'fsi', 'insurance')")
+    demo_name: str = Field(..., description="Demo name (e.g., 'leafy_bank_assistant', 'pdf_search')")
+
+class SetupRagRequest(BaseModel):
+    """Request model for setting up the RAG pipeline."""
+    industry: str = Field(..., description="Industry name (e.g., 'fsi', 'insurance')")
+    demo_name: str = Field(..., description="Demo name (e.g., 'leafy_bank_assistant', 'pdf_search')")
+
+class QueryPdfRequest(BaseModel):
+    """Request model for querying PDFs."""
+    industry: str = Field(..., description="Industry name (e.g., 'fsi', 'insurance')")
+    demo_name: str = Field(..., description="Demo name (e.g., 'leafy_bank_assistant', 'pdf_search')")
+    query: str = Field(..., description="The question to ask about the PDF documents")
+    guidelines: str = Field(..., description="PDF filename to filter results (e.g., 'personal-banking-terms-conditions.pdf')")
+
+# Response models are optional - FastAPI will auto-generate schemas from return values
+# Keeping them simple: just let FastAPI infer the response types
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -195,11 +216,10 @@ def get_model_rag(industry, demo_name):
 async def read_root(request: Request):
     return {"message":"Server is running"}
 
-@app.post("/cleandb")    
-async def clean_db_endpoint(request: Request):   
-    data = await request.json()
-    industry = data.get("industry")
-    demo_name = data.get("demo_name")
+@app.post("/cleandb", summary="Clean Database", description="Clean the database for a specific industry and demo")
+async def clean_db_endpoint(request: CleanDbRequest):   
+    industry = request.industry
+    demo_name = request.demo_name
 
     pdf_r = PDFRag(industry=industry, demo_name=demo_name)
 
@@ -229,11 +249,10 @@ async def clean_db_endpoint(request: Request):
     
     return {"message": "Database has been successfully cleaned!"}   
 
-@app.post("/setuprag")    
-async def setup_rag_endpoint(request: Request):
-    data = await request.json()
-    industry = data.get("industry")
-    demo_name = data.get("demo_name")
+@app.post("/setuprag", summary="Setup RAG Pipeline", description="Set up the RAG pipeline for a specific industry and demo")
+async def setup_rag_endpoint(request: SetupRagRequest):
+    industry = request.industry
+    demo_name = request.demo_name
 
     pdf_r = PDFRag(industry=industry, demo_name=demo_name)
 
@@ -270,13 +289,12 @@ async def setup_rag_endpoint(request: Request):
     
     return {"message": "Database and Model RAG have been successfully set!"}
 
-@app.post("/querythepdf")
-async def query_db_endpoint(request: Request):
-    data = await request.json()
-    industry = data.get("industry")
-    demo_name = data.get("demo_name")
-    query = data.get("query")
-    guidelines = data.get("guidelines")
+@app.post("/querythepdf", summary="Query PDF Documents", description="Query PDF documents using RAG to get answers based on the content")
+async def query_db_endpoint(request: QueryPdfRequest):
+    industry = request.industry
+    demo_name = request.demo_name
+    query = request.query
+    guidelines = request.guidelines
 
     # Check if model_rag is cached
     model_rag_instance = get_model_rag(industry, demo_name)
