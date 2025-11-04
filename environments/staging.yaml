@@ -1,0 +1,21 @@
+env:
+  NODE_ENV: staging
+  
+envSecrets:
+  MONGODB_URI: cross-be-pdf-rag
+  ARTIFACT_STORE: cross-be-pdf-rag
+  AWS_REGION: cross-be-pdf-rag
+  AWS_S3_ENABLED=: cross-be-pdf-rag
+  AWS_S3_BUCKET: cross-be-pdf-rag
+  AWS_S3_PDF_FOLDER: cross-be-pdf-rag
+  PDF_FOLDER: cross-be-pdf-rag
+  PDFS: cross-be-pdf-rag
+  EMBEDDING_MODEL: cross-be-pdf-rag
+  CHAT_COMPLETION_MODEL: cross-be-pdf-rag
+  NODE_ENV: cross-be-pdf-rag
+
+serviceAccount:
+  enabled: true
+  irsa:
+    accountId: "275662791714"
+    roleName: "kanopy-staging-cicd-irsa"

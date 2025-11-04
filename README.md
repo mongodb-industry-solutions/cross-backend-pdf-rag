@@ -50,7 +50,6 @@ PDF_FOLDER = "data/your_project/your_demo/pdfs"
 PDFS = ["personal-banking-terms-conditions.pdf"] # Add the PDFs you want to index, make sure they are in the PDF_FOLDER
 EMBEDDING_MODEL = "cohere.embed-english-v3"
 CHAT_COMPLETION_MODEL = "anthropic.claude-3-haiku-20240307-v1:0"
-ORIGINS=http://localhost:3000
 ```
 
 ### Step 2: Configure AWS Account
@@ -94,10 +93,10 @@ Start the server by running the following commands:
          ```
    2. Start the server.
         ```bash
-         poetry run uvicorn main:app --host 0.0.0.0 --port 8000
+         poetry run uvicorn main:app --host 0.0.0.0 --port 8080
          ```
 
-**_Note:_** The server will be running on `http://localhost:8000`.
+**_Note:_** The server will be running on `http://localhost:8080`.
 
 
 Ensure that you leave the following folders empty: `data/your_project/your_demo/artifacts` and `data/your_project/your_demo/pdf-images`. Delete any existing folders and files in these folders.
@@ -120,7 +119,7 @@ Ensure that you leave the following folders empty: `data/your_project/your_demo/
 3. Add the URL for the API using the following format:
 
 ```bash
-NEXT_PUBLIC_ASK_THE_PDF_API_URL="http://localhost:8000/querythepdf"
+NEXT_PUBLIC_ASK_THE_PDF_API_URL="http://localhost:8080/querythepdf"
 ```
 
 ## Run with Docker (Preferred)
@@ -145,3 +144,7 @@ You can imitate the same steps as mentioned above to interact with the API.
 ## Common errors
 
 - Check that you've created an `.env` file that contains your valid (and working) API keys, environment and index variables.
+
+## 📄 License
+
+See [LICENSE](LICENSE) file for details.
