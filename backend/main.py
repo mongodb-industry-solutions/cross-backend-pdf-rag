@@ -4,8 +4,6 @@ from fastapi import APIRouter
 from formatting import process_related_documents
 from contextlib import asynccontextmanager
 from pydantic import BaseModel, Field
-# Removed unused imports - keeping it simple
-
 from pdf_rag import PDFRag
 
 from superduper import logging
