@@ -5,7 +5,7 @@ envSecrets:
   MONGODB_URI: cross-be-pdf-rag
   ARTIFACT_STORE: cross-be-pdf-rag
   AWS_REGION: cross-be-pdf-rag
-  AWS_S3_ENABLED=: cross-be-pdf-rag
+  AWS_S3_ENABLED: cross-be-pdf-rag
   AWS_S3_BUCKET: cross-be-pdf-rag
   AWS_S3_PDF_FOLDER: cross-be-pdf-rag
   PDF_FOLDER: cross-be-pdf-rag
