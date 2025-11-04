@@ -18,7 +18,7 @@ my_industry:
 fsi:
   leafy_bank_assistant:
     mdb_url_secret: "ist/demos/fsi/mdb/uri"
-    mdb_database: "leafy_bank_assistant"
+    mdb_database: "leafy_bank_pdf_rag"
     aws_region: "us-east-1"
     aws_s3_enabled: True
     aws_s3_bucket: "industry-solutions-demos"
@@ -32,7 +32,7 @@ fsi:
 insurance:
   pdf_search:
     mdb_url_secret: "ist/demos/insurance/mdb/uri"
-    mdb_database: "insurance_pdf_search"
+    mdb_database: "insurance_pdf_rag"
     aws_region: "us-east-1"
     aws_s3_enabled: True
     aws_s3_bucket: "industry-solutions-demos"
