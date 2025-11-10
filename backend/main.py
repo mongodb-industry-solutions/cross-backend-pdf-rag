@@ -163,7 +163,6 @@ async def lifespan(app: FastAPI):
     logging.info("Insurance PDF Search database and Model RAG have been successfully set!")
 
     ##########################################
-    ##########################################
     
     logging.info("Startup setup completed.")
     yield
