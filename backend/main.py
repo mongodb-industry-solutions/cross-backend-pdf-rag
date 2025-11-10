@@ -168,15 +168,17 @@ async def lifespan(app: FastAPI):
     yield
     logging.info("Shutting down...")
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, redirect_slashes=False)
 
-# CORS middleware configuration
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, OPTIONS, etc.)
+    allow_headers=["*"],  # Allow all headers
+    expose_headers=["*"],  # Expose all headers to the client
+    max_age=3600,  # Cache preflight requests for 1 hour
 )
 router = APIRouter()
 
@@ -284,6 +286,11 @@ async def setup_rag_endpoint(request: SetupRagRequest):
         logging.info("Using cached instances...")
     
     return {"message": "Database and Model RAG have been successfully set!"}
+
+@app.options("/querythepdf")
+async def query_db_options():
+    """Handle OPTIONS preflight request for CORS."""
+    return {"message": "OK"}
 
 @app.post("/querythepdf", summary="Query PDF Documents", description="Query PDF documents using RAG to get answers based on the content")
 async def query_db_endpoint(request: QueryPdfRequest):
