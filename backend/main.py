@@ -103,9 +103,6 @@ async def lifespan(app: FastAPI):
     logging.info("Leafy Bank Assistant database and Model RAG have been successfully set!")
 
     ##########################################
-    ##########################################
-
-    ##########################################
     # Insurance PDF Search startup setup
     ##########################################
 
@@ -165,7 +162,6 @@ async def lifespan(app: FastAPI):
 
     logging.info("Insurance PDF Search database and Model RAG have been successfully set!")
 
-    ##########################################
     ##########################################
     
     logging.info("Startup setup completed.")
