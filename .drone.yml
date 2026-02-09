@@ -40,10 +40,10 @@ steps:
         - "ingress.enabled=true"
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.staging.corp.mongodb.com"
         - "mesh.enabled=true"
-        - "resources.limits.cpu=1000m"
-        - "resources.limits.memory=1024Mi"
+        - "resources.limits.cpu=2000m"
+        - "resources.limits.memory=8192Mi"
         - "resources.requests.cpu=1000m"
-        - "resources.requests.memory=1024Mi"
+        - "resources.requests.memory=4096Mi"
       api_server: https://api.staging.corp.mongodb.com
       kubernetes_token:
         from_secret: staging_kubernetes_token
