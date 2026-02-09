@@ -43,7 +43,7 @@ steps:
         - "resources.limits.cpu=1000m"
         - "resources.limits.memory=1024Mi"
         - "resources.requests.cpu=512m"
-        - "resources.requests.memory=384Mi"
+        - "resources.requests.memory=512Mi"
       api_server: https://api.staging.corp.mongodb.com
       kubernetes_token:
         from_secret: staging_kubernetes_token
