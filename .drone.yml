@@ -43,7 +43,7 @@ steps:
         - "resources.limits.cpu=2000m"
         - "resources.limits.memory=8192Mi"
         - "resources.requests.cpu=1000m"
-        - "resources.requests.memory=4096Mi"
+        - "resources.requests.memory=2048Mi"
       api_server: https://api.staging.corp.mongodb.com
       kubernetes_token:
         from_secret: staging_kubernetes_token
@@ -93,10 +93,10 @@ steps:
         - "ingress.enabled=true"
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.prod.corp.mongodb.com"
         - "mesh.enabled=true"
-        - "resources.limits.cpu=1000m"
-        - "resources.limits.memory=2048Mi"
-        - "resources.requests.cpu=1024m"
-        - "resources.requests.memory=1024Mi"
+        - "resources.limits.cpu=2000m"
+        - "resources.limits.memory=8192Mi"
+        - "resources.requests.cpu=1000m"
+        - "resources.requests.memory=4096Mi"
       api_server: https://api.prod.corp.mongodb.com
       kubernetes_token:
         from_secret: prod_kubernetes_token
