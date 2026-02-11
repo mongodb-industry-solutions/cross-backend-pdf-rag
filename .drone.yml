@@ -40,10 +40,18 @@ steps:
         - "ingress.enabled=true"
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.staging.corp.mongodb.com"
         - "mesh.enabled=true"
+        - "probes.enabled=true"
+        - "probes.path=/"
+        - "probes.startup.periodSeconds=10"
+        - "probes.startup.failureThreshold=36"
+        - "probes.liveness.initialDelaySeconds=10"
+        - "probes.liveness.failureThreshold=3"
+        - "probes.readiness.initialDelaySeconds=10"
+        - "probes.readiness.failureThreshold=3"
         - "resources.limits.cpu=2000m"
-        - "resources.limits.memory=8192Mi"
-        - "resources.requests.cpu=1000m"
-        - "resources.requests.memory=1024Mi"
+        - "resources.limits.memory=4092Mi"
+        - "resources.requests.cpu=512m"
+        - "resources.requests.memory=2048Mi"
       api_server: https://api.staging.corp.mongodb.com
       kubernetes_token:
         from_secret: staging_kubernetes_token
