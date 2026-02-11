@@ -42,7 +42,7 @@ steps:
         - "mesh.enabled=true"
         - "resources.limits.cpu=2000m"
         - "resources.limits.memory=4092Mi"
-        - "resources.requests.cpu=1000m"
+        - "resources.requests.cpu=1200m"
         - "resources.requests.memory=2048Mi"
       api_server: https://api.staging.corp.mongodb.com
       kubernetes_token:
