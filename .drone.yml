@@ -10,6 +10,13 @@ trigger:
 steps:
   - name: publish-backend
     image: plugins/kaniko-ecr
+    resources:
+      requests:
+        cpu: 1000
+        memory: 2048MiB
+      limits:
+        cpu: 2000
+        memory: 4096MiB
     settings:
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
@@ -63,6 +70,13 @@ trigger:
 steps:
   - name: publish-backend
     image: plugins/kaniko-ecr
+    resources:
+      requests:
+        cpu: 1000
+        memory: 2048MiB
+      limits:
+        cpu: 2000
+        memory: 4096MiB
     settings:
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
