@@ -1,7 +1,12 @@
+import os
+
 from get_db import get_database
 from storing import get_data, split_image
 from chunking import get_chunks
 from rag_model import Rag
+from db.clean_db import delete_collections_except_default
+
+from pdf2image import convert_from_path
 
 from superduper import Schema, Table
 from superduper.components.schema import FieldType
@@ -20,13 +25,76 @@ from utils import Processor
 
 from superduper import Table
 
+
+def _rag_data_exists(db, source_collection_name, pdf_folder):
+    """Check if RAG pipeline data already exists in MongoDB."""
+    try:
+        existing_docs = list(db[source_collection_name].find().execute())
+        if not existing_docs:
+            return False
+
+        expected_data = get_data(pdf_folder=pdf_folder)
+        expected_urls = {d["url"] for d in expected_data}
+        existing_urls = {d["url"] for d in existing_docs}
+
+        if expected_urls != existing_urls:
+            return False
+
+        db.load("vector_index", "vector-index")
+        return True
+    except Exception:
+        return False
+
+
+def _ensure_images_cached(db, source_collection_name, pdf_folder):
+    """Regenerate page images from PDFs if not already in the local cache."""
+    image_folder = os.environ.get("IMAGES_FOLDER", ".cache/images")
+
+    docs = list(db[source_collection_name].find().execute())
+    for doc in docs:
+        pdf_id = str(doc["_id"])
+        pdf_url = doc["url"]
+
+        cache_dir = os.path.join(image_folder, pdf_id)
+        if os.path.exists(cache_dir) and os.listdir(cache_dir):
+            continue
+
+        if not os.path.exists(pdf_url):
+            logging.warning(f"PDF not found at {pdf_url}, skipping image cache")
+            continue
+
+        os.makedirs(cache_dir, exist_ok=True)
+        images = convert_from_path(pdf_url)
+        for i, image in enumerate(images):
+            image.save(os.path.join(cache_dir, f"{i}.jpg"))
+        logging.info(f"Cached {len(images)} page images for {os.path.basename(pdf_url)}")
+
+
 # Based on https://github.com/superduper-io/superduper/blob/main/templates/pdf_rag/build.ipynb
 def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region: str,
              embedding_model: str, chat_completion_model: str,
              source_collection_name: str = "source"):
-    
-    # Get the database
+
     db = get_database(mongo_uri=mongodb_uri, artifact_store=artifact_store)
+
+    # Fast path: load existing model if data is already processed
+    if _rag_data_exists(db, source_collection_name, pdf_folder):
+        try:
+            logging.info("Existing RAG data found -- loading from database")
+            rag = db.load("model", "rag")
+            # Ensure nested Processor has db reference for query-time image lookups
+            if rag.processor:
+                rag.processor.db = db
+            _ensure_images_cached(db, source_collection_name, pdf_folder)
+            return db, rag
+        except Exception as e:
+            logging.warning(f"Failed to load existing model: {e}")
+
+    # Full pipeline: clean stale data first, then re-ingest
+    logging.info("Running full ingestion pipeline...")
+    delete_collections_except_default(mongodb_uri)
+    db = get_database(mongo_uri=mongodb_uri, artifact_store=artifact_store)
+
     logging.info(f"Getting data...")
 
     # Get the data
