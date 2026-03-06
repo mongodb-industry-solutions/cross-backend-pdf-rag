@@ -1,5 +1,9 @@
 #-------------------------------------------------------- General --------------------------------------------------------
 
+# Version control and IDE
+.git
+.cursor
+
 # Byte-compiled files
 __pycache__
 *.py[cod]

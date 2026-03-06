@@ -18,6 +18,8 @@ steps:
         cpu: 2000
         memory: 4096MiB
     settings:
+      compressed_caching: false
+      snapshot_mode: redo
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
       repo: industrysolutions/cross-be-pdf-rag
@@ -78,6 +80,8 @@ steps:
         cpu: 2000
         memory: 4096MiB
     settings:
+      compressed_caching: false
+      snapshot_mode: redo
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
       repo: industrysolutions/cross-be-pdf-rag
