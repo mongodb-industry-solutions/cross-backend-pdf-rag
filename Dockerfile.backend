@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install ffmpeg libsm6 poppler-utils libxext6 tesse
 COPY /backend/pyproject.toml /backend/poetry.lock ./
 
 # Poetry installation
-RUN pip install poetry==1.8.4
+RUN pip install poetry==2.1.1
 
 # Poetry config & install dependencies
 RUN poetry config virtualenvs.in-project true
