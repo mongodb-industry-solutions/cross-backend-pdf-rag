@@ -10,7 +10,16 @@ trigger:
 steps:
   - name: publish-backend
     image: plugins/kaniko-ecr
+    resources:
+      requests:
+        cpu: 1000
+        memory: 2048Mi
+      limits:
+        cpu: 2000
+        memory: 4096Mi
     settings:
+      compressed_caching: false
+      snapshot_mode: redo
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
       repo: industrysolutions/cross-be-pdf-rag
@@ -40,10 +49,10 @@ steps:
         - "ingress.enabled=true"
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.staging.corp.mongodb.com"
         - "mesh.enabled=true"
-        - "resources.limits.cpu=2000m"
-        - "resources.limits.memory=8192Mi"
-        - "resources.requests.cpu=1000m"
-        - "resources.requests.memory=4096Mi"
+        - "resources.limits.cpu=1000m"
+        - "resources.limits.memory=2048Mi"
+        - "resources.requests.cpu=200m"
+        - "resources.requests.memory=512Mi"
       api_server: https://api.staging.corp.mongodb.com
       kubernetes_token:
         from_secret: staging_kubernetes_token
@@ -63,7 +72,16 @@ trigger:
 steps:
   - name: publish-backend
     image: plugins/kaniko-ecr
+    resources:
+      requests:
+        cpu: 1000
+        memory: 2048Mi
+      limits:
+        cpu: 2000
+        memory: 4096Mi
     settings:
+      compressed_caching: false
+      snapshot_mode: redo
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
       repo: industrysolutions/cross-be-pdf-rag
@@ -93,10 +111,10 @@ steps:
         - "ingress.enabled=true"
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.prod.corp.mongodb.com"
         - "mesh.enabled=true"
-        - "resources.limits.cpu=2000m"
-        - "resources.limits.memory=8192Mi"
-        - "resources.requests.cpu=1000m"
-        - "resources.requests.memory=4096Mi"
+        - "resources.limits.cpu=1000m"
+        - "resources.limits.memory=3072Mi"
+        - "resources.requests.cpu=200m"
+        - "resources.requests.memory=512Mi"
       api_server: https://api.prod.corp.mongodb.com
       kubernetes_token:
         from_secret: prod_kubernetes_token

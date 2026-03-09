@@ -58,22 +58,6 @@ async def lifespan(app: FastAPI):
     logging.info("Demo:")
     logging.info(fsi_pdf_startup.demo_name)
 
-    logging.info("Cleaning up database...")
-    fsi_pdf_startup.clean_db()
-
-    # Clear cached variables for the specific industry and demo_name
-    key = get_cache_key(fsi_pdf_startup.industry, fsi_pdf_startup.demo_name)
-    if key in db_cache:
-        del db_cache[key]
-        logging.info(f"Cleared db cache for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
-    else:
-        logging.info(f"No db_cache found for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
-    if key in model_rag_cache:
-        del model_rag_cache[key]
-        logging.info(f"Cleared model_rag cache for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
-    else:
-        logging.info(f"No model_rag_cache found for {fsi_pdf_startup.industry} - {fsi_pdf_startup.demo_name}")
-
     # Check and create the folders
     fsi_pdf_startup.check_and_create_folders()
 
@@ -117,22 +101,6 @@ async def lifespan(app: FastAPI):
     logging.info(insurance_pdf_startup.industry)
     logging.info("Demo:")
     logging.info(insurance_pdf_startup.demo_name)
-
-    logging.info("Cleaning up database...")
-    insurance_pdf_startup.clean_db()
-
-    # Clear cached variables for the specific industry and demo_name
-    key = get_cache_key(insurance_pdf_startup.industry, insurance_pdf_startup.demo_name)
-    if key in db_cache:
-        del db_cache[key]
-        logging.info(f"Cleared db cache for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
-    else:
-        logging.info(f"No db_cache found for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
-    if key in model_rag_cache:
-        del model_rag_cache[key]
-        logging.info(f"Cleared model_rag cache for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
-    else:
-        logging.info(f"No model_rag_cache found for {insurance_pdf_startup.industry} - {insurance_pdf_startup.demo_name}")
 
     # Check and create the folders
     insurance_pdf_startup.check_and_create_folders()
