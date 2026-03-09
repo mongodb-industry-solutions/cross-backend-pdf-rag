@@ -12,11 +12,11 @@ steps:
     image: plugins/kaniko-ecr
     resources:
       requests:
-        cpu: 1000
-        memory: 2048MiB
+        cpu: 1000m
+        memory: 2048Mi
       limits:
-        cpu: 2000
-        memory: 4096MiB
+        cpu: 2000m
+        memory: 4096Mi
     settings:
       compressed_caching: false
       snapshot_mode: redo
@@ -74,11 +74,11 @@ steps:
     image: plugins/kaniko-ecr
     resources:
       requests:
-        cpu: 1000
-        memory: 2048MiB
+        cpu: 1000m
+        memory: 2048Mi
       limits:
-        cpu: 2000
-        memory: 4096MiB
+        cpu: 2000m
+        memory: 4096Mi
     settings:
       compressed_caching: false
       snapshot_mode: redo
