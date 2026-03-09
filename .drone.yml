@@ -109,7 +109,7 @@ steps:
         - "image.tag=git-${DRONE_COMMIT_SHA:0:7}"
         - "image.repository=795250896452.dkr.ecr.us-east-1.amazonaws.com/industrysolutions/cross-be-pdf-rag"
         - "ingress.enabled=true"
-        - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.staging.corp.mongodb.com"
+        - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.prod.corp.mongodb.com"
         - "mesh.enabled=true"
         - "resources.limits.cpu=1000m"
         - "resources.limits.memory=3072Mi"
