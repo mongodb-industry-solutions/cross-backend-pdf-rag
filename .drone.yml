@@ -13,10 +13,10 @@ steps:
     resources:
       requests:
         cpu: 1000
-        memory: 2048MiB
+        memory: 2048Mi
       limits:
         cpu: 2000
-        memory: 4096MiB
+        memory: 4096Mi
     settings:
       compressed_caching: false
       snapshot_mode: redo
@@ -75,10 +75,10 @@ steps:
     resources:
       requests:
         cpu: 1000
-        memory: 2048MiB
+        memory: 2048Mi
       limits:
         cpu: 2000
-        memory: 4096MiB
+        memory: 4096Mi
     settings:
       compressed_caching: false
       snapshot_mode: redo
