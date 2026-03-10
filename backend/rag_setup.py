@@ -25,6 +25,49 @@ from utils import Processor
 
 from superduper import Table
 
+_PROMPT_TEMPLATE = (
+    "The following is a document and question\n"
+    "Only provide a very concise answer\n"
+    "Context:\n\n"
+    "{context}\n\n"
+    "Here's the question:{query}\n"
+    "answer:"
+)
+
+
+def _build_rag_model(db, vector_index_name, chunk_key, split_image_key,
+                     chat_completion_model, aws_region):
+    """Construct a Rag model and its sub-components from scratch.
+
+    This avoids ``db.load("model", "rag")`` which fails on
+    superduper-framework 0.4.5 due to a Plugin deserialization bug
+    (``type_id``, a ClassVar, is stored as a regular field and then
+    rejected by ``Plugin.__init__``).
+    """
+    chat_completion = BedrockAnthropicChatCompletions(
+        identifier='chat-completion',
+        foundation_model=chat_completion_model,
+        aws_region=aws_region,
+    )
+
+    processor = Processor(
+        identifier="processor",
+        db=db,
+        chunk_key=chunk_key,
+        split_image_key=split_image_key,
+        plugins=[Plugin(path="./utils.py")],
+    )
+
+    rag = Rag(
+        identifier="rag",
+        llm_model=chat_completion,
+        vector_index_name=vector_index_name,
+        prompt_template=_PROMPT_TEMPLATE,
+        db=db,
+        processor=processor,
+    )
+    return rag
+
 
 def _rag_data_exists(db, source_collection_name, pdf_folder):
     """Check if RAG pipeline data already exists in MongoDB."""
@@ -85,18 +128,45 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
 
     db = get_database(mongo_uri=mongodb_uri, artifact_store=artifact_store)
 
-    # Fast path: load existing model if data is already processed
+    # Fast path: reconstruct model from existing components.
+    # We intentionally avoid ``db.load("model", "rag")`` because
+    # superduper-framework 0.4.5 fails to deserialize the nested Plugin
+    # (``type_id`` ClassVar is stored as a regular field and rejected by
+    # ``Plugin.__init__``).  Loading lightweight components (vector index,
+    # listener) and rebuilding the Rag model from them is both faster and
+    # immune to that serialization bug.
     if _rag_data_exists(db, source_collection_name, pdf_folder):
         try:
-            logging.info("Existing RAG data found -- loading from database")
-            rag = db.load("model", "rag")
-            # Ensure nested Processor has db reference for query-time image lookups
-            if rag.processor:
-                rag.processor.db = db
+            logging.info("Existing RAG data found -- reconstructing model from components")
+            vector_index = db.load("vector_index", "vector-index")
+
+            # Derive the chunk listener output key from the embedding
+            # listener's key (format: "<chunk_outputs>.txt").
+            embedding_key = vector_index.indexing_listener.key
+            if '.txt' not in embedding_key:
+                raise ValueError(
+                    f"Unexpected embedding key format: {embedding_key!r}; "
+                    "expected '<chunk_outputs>.txt'"
+                )
+            chunk_key = embedding_key.rsplit('.txt', 1)[0]
+
+            # Load the split-image listener to obtain its output key.
+            split_image_listener = db.load("listener", "split_image")
+            split_image_key = split_image_listener.outputs
+
+            rag = _build_rag_model(
+                db=db,
+                vector_index_name=vector_index.identifier,
+                chunk_key=chunk_key,
+                split_image_key=split_image_key,
+                chat_completion_model=chat_completion_model,
+                aws_region=aws_region,
+            )
+            rag.init(db=db)
             _ensure_images_cached(db, source_collection_name, pdf_folder)
             return db, rag
         except Exception as e:
-            logging.warning(f"Failed to load existing model: {e}")
+            logging.warning(f"Failed to reconstruct existing model: {e}")
 
     # Full pipeline: clean stale data first, then re-ingest
     logging.info("Running full ingestion pipeline...")
@@ -180,35 +250,19 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
     #### When applying the processor, saves the plugin in the database, thereby saving the related dependencies as well.
     #### The processor will integrate the returned chunks information with the images, and return a visualized image.​
 
-    processor = Processor(
-        identifier="processor",
-        db=db,
-        chunk_key=listener_chunk.outputs,
-        split_image_key=listener_split_image.outputs,
-        plugins=[Plugin(path="./utils.py")],
-    )
-
     # Create a RAG model
     #### Create a RAG model to perform retrieval-augmented generation (RAG) and return the results.
     #### Rag class here: ./rag_model.py
     #### Imported as from rag_model import Rag
 
-    chat_completion = BedrockAnthropicChatCompletions(
-        identifier='chat-completion',
-        foundation_model=chat_completion_model,
-        aws_region=aws_region
+    rag = _build_rag_model(
+        db=db,
+        vector_index_name=vector_index.identifier,
+        chunk_key=listener_chunk.outputs,
+        split_image_key=listener_split_image.outputs,
+        chat_completion_model=chat_completion_model,
+        aws_region=aws_region,
     )
-
-    prompt_template = (
-        "The following is a document and question\n"
-        "Only provide a very concise answer\n"
-        "Context:\n\n"
-        "{context}\n\n"
-        "Here's the question:{query}\n"
-        "answer:"
-    )
-
-    rag = Rag(identifier="rag", llm_model=chat_completion, vector_index_name=vector_index.identifier, prompt_template=prompt_template, db=db, processor=processor)
     db.apply(rag, force=True)
 
     return db, rag
