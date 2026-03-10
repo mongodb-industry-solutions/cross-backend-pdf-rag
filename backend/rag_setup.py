@@ -143,6 +143,11 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
             # Derive the chunk listener output key from the embedding
             # listener's key (format: "<chunk_outputs>.txt").
             embedding_key = vector_index.indexing_listener.key
+            if '.txt' not in embedding_key:
+                raise ValueError(
+                    f"Unexpected embedding key format: {embedding_key!r}; "
+                    "expected '<chunk_outputs>.txt'"
+                )
             chunk_key = embedding_key.rsplit('.txt', 1)[0]
 
             # Load the split-image listener to obtain its output key.
