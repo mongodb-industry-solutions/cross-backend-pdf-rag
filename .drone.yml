@@ -50,7 +50,7 @@ steps:
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.staging.corp.mongodb.com"
         - "mesh.enabled=true"
         - "resources.limits.cpu=1000m"
-        - "resources.limits.memory=2048Mi"
+        - "resources.limits.memory=4096Mi"
         - "resources.requests.cpu=200m"
         - "resources.requests.memory=512Mi"
       api_server: https://api.staging.corp.mongodb.com
