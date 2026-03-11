@@ -112,7 +112,7 @@ steps:
         - "ingress.hosts[0]=cross-be-pdf-rag.industrysolutions.prod.corp.mongodb.com"
         - "mesh.enabled=true"
         - "resources.limits.cpu=1000m"
-        - "resources.limits.memory=3072Mi"
+        - "resources.limits.memory=8192Mi"
         - "resources.requests.cpu=200m"
         - "resources.requests.memory=512Mi"
       api_server: https://api.prod.corp.mongodb.com
