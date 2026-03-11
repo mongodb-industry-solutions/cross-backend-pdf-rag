@@ -31,9 +31,9 @@ def get_database(mongo_uri: str, artifact_store: str):
             mongo_uri, artifact_store=f"filesystem://{artifacts_folder}")
 
         logging.info("Database details:")
-        logging.info({db})
+        logging.info(db)
         logging.info("Type:")
-        logging.info({type(db)})
+        logging.info(type(db))
 
         return db
     except Exception as e:
