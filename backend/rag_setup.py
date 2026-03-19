@@ -136,6 +136,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
         try:
             logging.info("Existing RAG data found -- reconstructing model from components")
             vector_index = db.load("vector_index", "vector-index")
+            vector_index.copy_vectors()
 
             # Derive the chunk listener output key from the embedding
             # listener's key (format: "<chunk_outputs>.txt").
