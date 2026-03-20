@@ -30,10 +30,7 @@ def get_database(mongo_uri: str, artifact_store: str):
         db = superduper(
             mongo_uri, artifact_store=f"filesystem://{artifacts_folder}")
 
-        logging.info("Database details:")
-        logging.info(db)
-        logging.info("Type:")
-        logging.info(type(db))
+        logging.info(f"Database connected: {type(db).__name__}")
 
         return db
     except Exception as e:
