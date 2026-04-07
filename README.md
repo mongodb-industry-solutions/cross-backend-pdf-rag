@@ -16,7 +16,7 @@ This project leverages [MongoDB Atlas Vector Search](https://www.mongodb.com/pro
 - [MongoDB Atlas Vector Search](https://www.mongodb.com/products/platform/atlas-vector-search) for efficient data indexing and retrieval.
 - AWS [Bedrock](https://aws.amazon.com/bedrock/) models for embeddings and querying.
 - [Cohere English V3](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-embed.html) `cohere.embed-english-v3`  model for embeddings.
-- [Anthropic Claude 3 Haiku](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-runtime_example_bedrock-runtime_InvokeModel_AnthropicClaude_section.html) `anthropic.claude-3-haiku-20240307-v1:0`  model for chat completions.
+- [Anthropic Claude Haiku 4.5](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-runtime_example_bedrock-runtime_InvokeModel_AnthropicClaude_section.html) via a Bedrock cross-region application inference profile for chat completions.
 - Using [Superduper](https://superduper.io/) for simplifying the integration of AI with MongoDB databases.
 
 ## Prerequisites
@@ -49,7 +49,7 @@ AWS_S3_PDF_FOLDER =
 PDF_FOLDER = "data/your_project/your_demo/pdfs"
 PDFS = ["personal-banking-terms-conditions.pdf"] # Add the PDFs you want to index, make sure they are in the PDF_FOLDER
 EMBEDDING_MODEL = "cohere.embed-english-v3"
-CHAT_COMPLETION_MODEL = "anthropic.claude-3-haiku-20240307-v1:0"
+CHAT_COMPLETION_MODEL = "arn:aws:bedrock:us-east-1:275662791714:application-inference-profile/babs4z31qt4s"
 ```
 
 ### Step 2: Configure AWS Account
