@@ -85,13 +85,11 @@ def _rag_data_exists(db, source_collection_name, pdf_folder):
 
         db.load("vector_index", "vector-index")
         return True
-    except FileNotFoundError:
-        return False
     except Exception as exc:
-        logging.error(
-            f"Error while checking for existing RAG data in collection {source_collection_name}: {exc}",
+        logging.warn(
+            f"Could not verify existing RAG data in '{source_collection_name}': {exc} -- will re-ingest",
         )
-        raise
+        return False
 
 
 def _ensure_images_cached(db, source_collection_name, pdf_folder):
