@@ -108,7 +108,7 @@ def _ensure_images_cached(db, source_collection_name, pdf_folder):
             continue
 
         if not os.path.exists(pdf_url):
-            logging.warning(f"PDF not found at {pdf_url}, skipping image cache")
+            logging.warn(f"PDF not found at {pdf_url}, skipping image cache")
             continue
 
         os.makedirs(cache_dir, exist_ok=True)
@@ -164,7 +164,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
             _ensure_images_cached(db, source_collection_name, pdf_folder)
             return db, rag
         except Exception as e:
-            logging.warning(f"Failed to reconstruct existing model: {e}")
+            logging.warn(f"Failed to reconstruct existing model: {e}")
 
     # Full pipeline: clean stale data first, then re-ingest
     logging.info("Running full ingestion pipeline...")
