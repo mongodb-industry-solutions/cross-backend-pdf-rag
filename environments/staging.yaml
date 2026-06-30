@@ -1,3 +1,10 @@
+security:
+  dataClassification: "Internal"
+  dataDesignation: ["MI"]
+
+ownership:
+  driEmail: albert.cortez@mongodb.com
+
 env:
   NODE_ENV: staging
   
