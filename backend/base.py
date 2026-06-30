@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Dict
 import json
 import os.path as op
-import re
 import yaml
 import boto3
 from botocore.exceptions import ClientError
@@ -98,10 +97,6 @@ class BaseConfig(ABC):
                 self.mdb_database = self.demo_config["mdb_database"] + "_stg"
             else:
                 self.mdb_database = self.demo_config["mdb_database"]
-            # ================================
-            logging.info(f"NODE_ENV: {os.environ.get('NODE_ENV')}")
-            logging.info(f"MongoDB database name: {self.mdb_database}")
-            # ================================
             # Construct the MongoDB URI with the database name
             self.mdb_uri = f"mongodb+srv://{self.mdb_username}:{self.mdb_password}@{self.mdb_clustername}/{self.mdb_database}"
         else:
@@ -125,13 +120,6 @@ class BaseConfig(ABC):
         This method should contain the main logic to be executed.
         """
         ...
-
-    @staticmethod
-    def sanitize_uri(uri: str) -> str:
-        """Strip credentials from a MongoDB connection string for safe logging."""
-        if not uri:
-            return uri
-        return re.sub(r'(mongodb\+srv://)([^@]+)(@)', r'\1***:***\3', uri)
 
     def get_configuration(self, industry: str ='') -> Dict:
         """
