@@ -85,13 +85,11 @@ def _rag_data_exists(db, source_collection_name, pdf_folder):
 
         db.load("vector_index", "vector-index")
         return True
-    except FileNotFoundError:
-        return False
     except Exception as exc:
-        logging.error(
-            f"Error while checking for existing RAG data in collection {source_collection_name}: {exc}",
+        logging.warn(
+            f"Could not verify existing RAG data in '{source_collection_name}': {exc} -- will re-ingest",
         )
-        raise
+        return False
 
 
 def _ensure_images_cached(db, source_collection_name, pdf_folder):
@@ -108,7 +106,7 @@ def _ensure_images_cached(db, source_collection_name, pdf_folder):
             continue
 
         if not os.path.exists(pdf_url):
-            logging.warning(f"PDF not found at {pdf_url}, skipping image cache")
+            logging.warn(f"PDF not found at {pdf_url}, skipping image cache")
             continue
 
         os.makedirs(cache_dir, exist_ok=True)
@@ -136,6 +134,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
         try:
             logging.info("Existing RAG data found -- reconstructing model from components")
             vector_index = db.load("vector_index", "vector-index")
+            vector_index.copy_vectors()
 
             # Derive the chunk listener output key from the embedding
             # listener's key (format: "<chunk_outputs>.txt").
@@ -163,7 +162,7 @@ def rag_setup(mongodb_uri: str, artifact_store: str, pdf_folder: str, aws_region
             _ensure_images_cached(db, source_collection_name, pdf_folder)
             return db, rag
         except Exception as e:
-            logging.warning(f"Failed to reconstruct existing model: {e}")
+            logging.warn(f"Failed to reconstruct existing model: {e}")
 
     # Full pipeline: clean stale data first, then re-ingest
     logging.info("Running full ingestion pipeline...")

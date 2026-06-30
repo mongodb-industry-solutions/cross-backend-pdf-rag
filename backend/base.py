@@ -97,10 +97,6 @@ class BaseConfig(ABC):
                 self.mdb_database = self.demo_config["mdb_database"] + "_stg"
             else:
                 self.mdb_database = self.demo_config["mdb_database"]
-            # ================================
-            logging.info(f"NODE_ENV: {os.environ.get('NODE_ENV')}")
-            logging.info(f"MongoDB database name: {self.mdb_database}")
-            # ================================
             # Construct the MongoDB URI with the database name
             self.mdb_uri = f"mongodb+srv://{self.mdb_username}:{self.mdb_password}@{self.mdb_clustername}/{self.mdb_database}"
         else:
