@@ -17,7 +17,7 @@ my_industry:
 
 fsi:
   leafy_bank_assistant:
-    mdb_url_secret: "ist/demos/fsi/mdb/uri"
+    mdb_url_secret: ""
     mdb_database: "leafy_bank_pdf_rag"
     aws_region: "us-east-1"
     aws_s3_enabled: True
@@ -38,7 +38,8 @@ insurance:
     aws_s3_bucket: "industry-solutions-demos"
     aws_s3_pdf_folder: "industry/insurance/pdf_rag/pdf_search/pdf-folder/"
     pdf_folder: "data/insurance/pdf_search/pdfs"
-    pdfs: ["guidlines_insurance_ny.pdf", "guidlines_risk_management_singapore.pdf"]
+    pdfs:
+      ["guidlines_insurance_ny.pdf", "guidlines_risk_management_singapore.pdf"]
     artifacts_store: "data/insurance/pdf_search/artifacts"
     embedding_model: "cohere.embed-english-v3"
     chat_completion_model: "arn:aws:bedrock:us-east-1:275662791714:application-inference-profile/babs4z31qt4s"
