@@ -8,18 +8,28 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
 pymongo = "^4.10.1"
-python-dotenv = "^1.0.1"
-fastapi = "^0.115.4"
+python-dotenv = "^1.2.2"
+fastapi = "^0.136.3"
+starlette = ">=1.0.1"
 uvicorn = "^0.32.0"
-botocore = "^1.35.63"
-boto3 = "^1.35.63"
+botocore = "^1.40.0"
+boto3 = "^1.40.0"
 pyyaml = "^6.0.2"
 loki-logger-handler = "1.0.0"
 pikepdf = "^9.4.2"
 unstructured = {extras = ["pdf"], version = "^0.18.18"}
 superduper-framework = "0.4.5"
 superduper-mongodb = "0.4.1"
-nltk = ">=3.9.4"
+# Security floor-constraints: force fixed transitive versions past loose parent pins.
+# Parents (unstructured/torch/transformers/superduper/nltk) pin these "*", so raising
+# the floor is resolver-safe. Remediation of the ML/PDF stack (torch, transformers,
+# onnx, pypdf, pillow, lxml, pi-heif, protobuf) requires Python 3.11+ + unstructured 0.24.
+nltk = ">=3.10.3"
+jinja2 = ">=3.1.6"
+filelock = ">=3.20.3"
+pygments = ">=2.20.0"
+click = ">=8.3.3"
+onnx = ">=1.22.0"
 
 [build-system]
 requires = ["poetry-core"]
