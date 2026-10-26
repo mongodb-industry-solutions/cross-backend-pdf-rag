@@ -12,7 +12,7 @@ This project leverages [MongoDB Atlas Vector Search](https://www.mongodb.com/pro
 
 ## Tech Stack
 
-- Python `>=3.10,<3.11` for the Backend implementation.
+- Python `>=3.11,<3.12` for the Backend implementation.
 - [MongoDB Atlas Vector Search](https://www.mongodb.com/products/platform/atlas-vector-search) for efficient data indexing and retrieval.
 - AWS [Bedrock](https://aws.amazon.com/bedrock/) models for embeddings and querying.
 - [Cohere English V3](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-embed.html) `cohere.embed-english-v3` model for embeddings.
@@ -24,7 +24,7 @@ This project leverages [MongoDB Atlas Vector Search](https://www.mongodb.com/pro
 Before you begin, ensure you have met the following requirements:
 
 - MongoDB Atlas account, you can create one [here](https://account.mongodb.com/account/register). Free tier is sufficient for this project.
-- Python 3.10 or higher `>=3.10,<3.11` (but less than 3.11).
+- Python 3.11 `>=3.11,<3.12` (but less than 3.12).
 - AWS Account with access to mentioned Bedrock models.
 - Poetry (install via [Poetry's official documentation](https://python-poetry.org/docs/#installation)).
 
