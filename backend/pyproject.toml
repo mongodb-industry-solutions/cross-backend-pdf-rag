@@ -6,7 +6,7 @@ authors = ["Julian Boronat <julian.boronat@mongodb.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.11,<3.12"
 pymongo = "^4.10.1"
 python-dotenv = "^1.0.1"
 fastapi = "^0.115.4"
@@ -15,8 +15,8 @@ botocore = "^1.35.63"
 boto3 = "^1.35.63"
 pyyaml = "^6.0.2"
 loki-logger-handler = "1.0.0"
-pikepdf = "^9.4.2"
-unstructured = {extras = ["pdf"], version = "^0.18.18"}
+pikepdf = "^10.3.0"
+unstructured = {extras = ["pdf"], version = "^0.24.0"}
 superduper-framework = "0.4.5"
 superduper-mongodb = "0.4.1"
 nltk = ">=3.9.4"
