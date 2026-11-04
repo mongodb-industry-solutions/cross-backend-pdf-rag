@@ -24,7 +24,7 @@ This project leverages [MongoDB Atlas Vector Search](https://www.mongodb.com/pro
 Before you begin, ensure you have met the following requirements:
 
 - MongoDB Atlas account, you can create one [here](https://account.mongodb.com/account/register). Free tier is sufficient for this project.
-- Python 3.10 or higher `>=3.10,<3.11` (but less than 3.11).
+- Python 3.11 `>=3.11,<3.12` (but less than 3.12).
 - AWS Account with access to mentioned Bedrock models.
 - Poetry (install via [Poetry's official documentation](https://python-poetry.org/docs/#installation)).
 
